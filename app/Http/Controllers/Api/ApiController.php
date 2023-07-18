@@ -10,7 +10,7 @@ use App\Models\Project;
 class ApiController extends Controller
 {
     public function index() {
-        $projects = Project::with("type", "technologies")->paginate(3);
+        $projects = Project::with("type", "technologies")->paginate(2);
 
         $response = [
             "success" => true,
