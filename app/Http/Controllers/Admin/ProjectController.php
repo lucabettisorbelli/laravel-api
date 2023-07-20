@@ -91,18 +91,13 @@ class ProjectController extends Controller
         $data = $request->validated();
 
         $project->update($data);
-
-        //Eliminiamo il collegamento con eventuali tags e poi lo ricreiamo
-        // $post->tags()->detach();
-        // $post->tags()->attach( $data->tags );
-
-        //Oppure facciamo tutto in un unico comando
-        if (isset($data['technologies'])) {
-            $project->technologies()->sync($data['technologies']);
-        } else {
-            $project->technologies()->detach();
-        }
-
+    
+        $technologies = collect($request->get('technologies'))->map(function ($technology) {
+            return $technology->id;
+        });
+    
+        $project->technologies()->sync($technologies);
+    
         return to_route("admin.projects.show", $project);
     }
 
